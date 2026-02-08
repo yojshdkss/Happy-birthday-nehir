@@ -19,7 +19,7 @@
             color: white;
         }
 
-        /* Countdown Styles */
+        /* Countdown */
         #countdown-container {
             position: fixed;
             inset: 0;
@@ -31,22 +31,19 @@
         }
 
         .number {
-            font-size: 10rem;
+            font-size: 8rem;
             font-weight: 800;
             color: #ffcc00;
-            text-shadow: 0 0 30px rgba(255, 204, 0, 0.5);
+            text-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
             opacity: 0;
             position: absolute;
             transform: scale(0.5);
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .number.active {
-            opacity: 1;
-            transform: scale(1);
-        }
+        .number.active { opacity: 1; transform: scale(1); }
 
-        /* Fireworks Canvas */
+        /* Canvas */
         #canvas {
             position: fixed;
             top: 0;
@@ -57,7 +54,7 @@
             pointer-events: none;
         }
 
-        /* Envelope / Card Styles */
+        /* Envelope */
         #envelope-wrapper {
             position: fixed;
             inset: 0;
@@ -76,8 +73,8 @@
             height: 200px;
             background: #d44;
             cursor: pointer;
-            transition: transform 0.5s;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-top: 50px; /* Bajamos el sobre un poco para dar aire arriba */
         }
 
         .envelope::before {
@@ -108,6 +105,7 @@
             bottom: 0;
         }
 
+        /* Card */
         .card {
             position: absolute;
             bottom: 5px;
@@ -116,8 +114,8 @@
             height: 180px;
             background: white;
             z-index: 1;
-            transition: all 0.8s ease-in-out;
-            padding: 25px 20px;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 20px;
             color: #333;
             border-radius: 5px;
             box-sizing: border-box;
@@ -126,54 +124,48 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            scrollbar-width: none; /* Firefox */
+            scrollbar-width: none;
         }
 
-        .card::-webkit-scrollbar {
-            display: none; /* Chrome/Safari */
-        }
+        .card::-webkit-scrollbar { display: none; }
 
         .envelope.open .card {
-            /* Corregido: Usamos transform proporcional para que no se salga de la pantalla */
-            transform: translateY(-65%) scale(1.1);
-            height: 420px;
-            max-height: 75vh;
+            /* Fix: No subimos tanto para que no se corte arriba */
+            transform: translateY(-180px) scale(1.05); 
+            height: 400px;
+            max-height: 60vh; /* Se adapta a la pantalla del móvil */
             z-index: 10;
             width: 320px;
             left: -10px;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.4);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.5);
         }
 
         .card h2 {
             font-family: 'Dancing Script', cursive;
             color: #e63946;
-            font-size: 1.8rem;
-            margin-bottom: 15px;
+            font-size: 1.6rem;
+            margin-bottom: 10px;
             flex-shrink: 0;
         }
 
         .card p {
             font-size: 0.85rem;
-            line-height: 1.6;
-            margin-bottom: 15px;
+            line-height: 1.5;
+            margin-bottom: 12px;
             color: #444;
         }
 
-        /* Pixel Daisy */
+        /* Daisy */
         .daisy-container {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             display: grid;
             grid-template-columns: repeat(8, 1fr);
             margin-bottom: 10px;
             flex-shrink: 0;
         }
 
-        .pixel {
-            width: 100%;
-            aspect-ratio: 1;
-        }
-
+        .pixel { width: 100%; aspect-ratio: 1; }
         .w { background: white; }
         .y { background: #ffd700; }
         .g { background: #2d6a4f; }
@@ -195,19 +187,18 @@
         }
 
         @keyframes pulse {
-            0% { transform: translate(-50%, -50%) scale(1); }
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
             50% { transform: translate(-50%, -50%) scale(1.1); }
-            100% { transform: translate(-50%, -50%) scale(1); }
         }
 
         #bg-text {
             position: fixed;
-            bottom: 20px;
+            bottom: 15px;
             width: 100%;
             text-align: center;
-            color: rgba(255,255,255,0.15);
-            font-size: 0.7rem;
-            letter-spacing: 3px;
+            color: rgba(255,255,255,0.1);
+            font-size: 0.65rem;
+            letter-spacing: 2px;
         }
     </style>
 </head>
@@ -231,7 +222,7 @@
                 
                 <p>Hi! I hope you’re having an amazing day. I took the time to put this little space together to reach out because today is a special date.</p>
                 
-                <p>It’s been five years since we first met, and even though life has taken us in different directions and we both have our own lives now, there are people who will always hold a place of respect in my memory. I didn't want this day to pass by like any other; it's always a pleasure for me to know that you’re doing well and moving forward in everything you set your mind to.</p>
+                <p>It’s been five years since we first met, and even though life has taken us in different directions and we both have our own lives now, there are people who will always hold a place of respect in my memory. I didn't want this day to pass by like any other; it's always a pleasure for me to know that you’re doing well and moving forward.</p>
                 
                 <p>From the bottom of my heart, I wish for this new year of life to be filled with fulfillment, for you to reach every goal you have in mind, and for any challenges to only make you stronger. You deserve for nothing but good things to happen to you, today and always.</p>
                 
@@ -242,10 +233,10 @@
         </div>
     </div>
 
-    <div id="bg-text">CELEBRATING FIVE YEARS OF KNOWING YOU</div>
+    <div id="bg-text">CELEBRATING FIVE YEARS</div>
 
     <script>
-        // --- Pixel Daisy ---
+        // --- Pixel Art Daisy ---
         const daisyPattern = [
             'x','x','w','w','w','x','x','x',
             'x','w','w','y','w','w','x','x',
@@ -256,7 +247,6 @@
             'x','x','g','g','g','x','x','x',
             'x','x','x','g','x','x','x','x'
         ];
-
         const daisyEl = document.getElementById('daisy');
         daisyPattern.forEach(pixel => {
             const div = document.createElement('div');
@@ -264,67 +254,48 @@
             daisyEl.appendChild(div);
         });
 
-        // --- Fireworks Logic ---
+        // --- Fireworks ---
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        resize();
 
         class Particle {
             constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
+                this.x = x; this.y = y; this.color = color;
                 this.velocity = { x: (Math.random() - 0.5) * 8, y: (Math.random() - 0.5) * 8 };
-                this.alpha = 1;
-                this.friction = 0.95;
-                this.gravity = 0.15;
+                this.alpha = 1; this.friction = 0.95; this.gravity = 0.15;
             }
             draw() {
-                ctx.save();
-                ctx.globalAlpha = this.alpha;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.fill();
-                ctx.restore();
+                ctx.save(); ctx.globalAlpha = this.alpha;
+                ctx.beginPath(); ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = this.color; ctx.fill(); ctx.restore();
             }
             update() {
-                this.velocity.x *= this.friction;
-                this.velocity.y *= this.friction;
-                this.velocity.y += this.gravity;
-                this.x += this.velocity.x;
-                this.y += this.velocity.y;
+                this.velocity.x *= this.friction; this.velocity.y *= this.friction;
+                this.velocity.y += this.gravity; this.x += this.velocity.x; this.y += this.velocity.y;
                 this.alpha -= 0.01;
             }
         }
 
-        function createFirework(x, y) {
+        function firework(x, y) {
             const colors = ['#ff0040', '#00ffcc', '#ffcc00', '#ff00ff', '#ffffff'];
             const color = colors[Math.floor(Math.random() * colors.length)];
             for (let i = 0; i < 50; i++) particles.push(new Particle(x, y, color));
         }
 
         function animate() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            particles.forEach((p, i) => {
-                if (p.alpha > 0) { p.update(); p.draw(); }
-                else { particles.splice(i, 1); }
-            });
+            particles.forEach((p, i) => { if (p.alpha > 0) { p.update(); p.draw(); } else { particles.splice(i, 1); } });
             requestAnimationFrame(animate);
         }
 
-        // --- Sequence ---
-        const countdown = async () => {
-            const nums = ['3', '2', '1', '0'];
-            for (let n of nums) {
+        // --- Init ---
+        const start = async () => {
+            for (let n of ['3', '2', '1', '0']) {
                 const el = document.getElementById(`num-${n}`);
                 el.classList.add('active');
                 await new Promise(r => setTimeout(r, 1000));
@@ -332,27 +303,23 @@
             }
             document.getElementById('countdown-container').style.display = 'none';
             animate();
-            for(let i=0; i<12; i++) {
-                setTimeout(() => createFirework(Math.random()*canvas.width, Math.random()*canvas.height*0.5), i*250);
-            }
+            for(let i=0; i<10; i++) setTimeout(() => firework(Math.random()*canvas.width, Math.random()*canvas.height*0.4), i*300);
             setTimeout(() => {
-                const wrapper = document.getElementById('envelope-wrapper');
-                wrapper.style.display = 'flex';
-                setTimeout(() => wrapper.style.opacity = '1', 100);
+                const w = document.getElementById('envelope-wrapper');
+                w.style.display = 'flex';
+                setTimeout(() => w.style.opacity = '1', 100);
             }, 1000);
         };
 
-        const envelope = document.getElementById('envelope');
-        envelope.addEventListener('click', () => {
-            envelope.classList.toggle('open');
-            const clickMe = envelope.querySelector('.click-me');
-            if (clickMe) clickMe.style.display = 'none';
-            if(envelope.classList.contains('open')) {
-                setInterval(() => createFirework(Math.random()*canvas.width, Math.random()*canvas.height), 1500);
-            }
+        document.getElementById('envelope').addEventListener('click', function() {
+            this.classList.toggle('open');
+            const btn = this.querySelector('.click-me');
+            if (btn) btn.style.display = 'none';
+            if(this.classList.contains('open')) setInterval(() => firework(Math.random()*canvas.width, Math.random()*canvas.height), 2000);
         });
 
-        window.onload = countdown;
+        window.onload = start;
     </script>
 </body>
 </html>
+

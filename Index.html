@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Surprise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0a0a0a;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+        }
+
+        /* Countdown Styles */
+        #countdown-container {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+        }
+
+        .number {
+            font-size: 15rem;
+            font-weight: 800;
+            color: #ffcc00;
+            text-shadow: 0 0 30px rgba(255, 204, 0, 0.5);
+            opacity: 0;
+            position: absolute;
+            transform: scale(0.5);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .number.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Fireworks Canvas */
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Envelope / Card Styles */
+        #envelope-wrapper {
+            position: fixed;
+            inset: 0;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+            perspective: 1000px;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: #d44;
+            cursor: pointer;
+            transition: transform 0.5s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .envelope:hover {
+            transform: translateY(-10px) rotateX(10px);
+        }
+
+        .envelope::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            z-index: 2;
+            border-top: 110px solid #f55;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            transform-origin: top;
+            transition: transform 0.4s 0.2s;
+        }
+
+        .envelope.open::before {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .envelope::after {
+            content: "";
+            position: absolute;
+            z-index: 1;
+            border-top: 100px solid transparent;
+            border-left: 150px solid #d44;
+            border-right: 150px solid #d44;
+            border-bottom: 100px solid #c33;
+            bottom: 0;
+        }
+
+        .card {
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+            width: 280px;
+            height: 180px;
+            background: white;
+            z-index: 1;
+            transition: transform 0.6s 0.5s;
+            padding: 20px;
+            color: #333;
+            border-radius: 5px;
+            box-sizing: border-box;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .envelope.open .card {
+            transform: translateY(-160px) scale(1.1);
+            height: auto;
+            min-height: 350px;
+            z-index: 3;
+            width: 340px;
+            left: -20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .card h2 {
+            font-family: 'Dancing Script', cursive;
+            color: #e63946;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        /* Pixel Daisy */
+        .daisy-container {
+            width: 80px;
+            height: 80px;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            margin: 10px auto;
+        }
+
+        .pixel {
+            width: 100%;
+            aspect-ratio: 1;
+        }
+
+        .w { background: white; }
+        .y { background: #ffd700; }
+        .g { background: #2d6a4f; }
+        .x { background: transparent; }
+
+        .click-me {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            background: white;
+            color: #d44;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        #bg-text {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: rgba(255,255,255,0.2);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="countdown-container">
+        <div id="num-3" class="number">3</div>
+        <div id="num-2" class="number">2</div>
+        <div id="num-1" class="number">1</div>
+        <div id="num-0" class="number">0</div>
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+    <div id="envelope-wrapper">
+        <div class="envelope" id="envelope">
+            <div class="click-me">CLICK HERE</div>
+            <div class="card">
+                <div class="daisy-container" id="daisy">
+                    <!-- Pixel Daisy will be injected here -->
+                </div>
+                <h2>Happy Birthday Nehir!</h2>
+                <p>
+                    I know it's been a long time since we haven't spoken but I hope that today on your birthday you had a great time and you've been taking good care of yourself, remember to eat very well and save me some cake.
+                </p>
+                <p class="font-bold text-pink-600">Happy Birthday 🎉🍰</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="bg-text">CELEBRATING YOU</div>
+
+    <script>
+        // --- Pixel Art Daisy Generation ---
+        const daisyPattern = [
+            'x','x','w','w','w','x','x','x',
+            'x','w','w','y','w','w','x','x',
+            'w','w','y','y','y','w','w','x',
+            'w','y','y','y','y','y','w','x',
+            'w','w','y','y','y','w','w','x',
+            'x','w','w','y','w','w','x','x',
+            'x','x','g','g','g','x','x','x',
+            'x','x','x','g','x','x','x','x'
+        ];
+
+        const daisyEl = document.getElementById('daisy');
+        daisyPattern.forEach(pixel => {
+            const div = document.createElement('div');
+            div.className = `pixel ${pixel}`;
+            daisyEl.appendChild(div);
+        });
+
+        // --- Fireworks Logic ---
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.velocity = {
+                    x: (Math.random() - 0.5) * 8,
+                    y: (Math.random() - 0.5) * 8
+                };
+                this.alpha = 1;
+                this.friction = 0.95;
+                this.gravity = 0.2;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+
+            update() {
+                this.velocity.x *= this.friction;
+                this.velocity.y *= this.friction;
+                this.velocity.y += this.gravity;
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.01;
+            }
+        }
+
+        function createFirework(x, y) {
+            const colors = ['#ff0040', '#00ffcc', '#ffcc00', '#ff00ff', '#ffffff', '#00ff00'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            for (let i = 0; i < 60; i++) {
+                particles.push(new Particle(x, y, color));
+            }
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach((p, i) => {
+                if (p.alpha > 0) {
+                    p.update();
+                    p.draw();
+                } else {
+                    particles.splice(i, 1);
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+
+        // --- Sequence Control ---
+        const countdown = async () => {
+            const nums = ['3', '2', '1', '0'];
+            for (let n of nums) {
+                const el = document.getElementById(`num-${n}`);
+                el.classList.add('active');
+                await new Promise(r => setTimeout(r, 1000));
+                el.classList.remove('active');
+            }
+            
+            // Explosion
+            document.getElementById('countdown-container').style.display = 'none';
+            animate();
+            
+            // Massive fireworks
+            for(let i=0; i<15; i++) {
+                setTimeout(() => {
+                    createFirework(
+                        Math.random() * canvas.width,
+                        Math.random() * (canvas.height * 0.6)
+                    );
+                }, i * 200);
+            }
+
+            // Show Envelope after fireworks start
+            setTimeout(() => {
+                const wrapper = document.getElementById('envelope-wrapper');
+                wrapper.style.display = 'flex';
+                setTimeout(() => wrapper.style.opacity = '1', 100);
+            }, 1500);
+        };
+
+        // --- Interaction ---
+        const envelope = document.getElementById('envelope');
+        envelope.addEventListener('click', () => {
+            envelope.classList.toggle('open');
+            const clickMe = envelope.querySelector('.click-me');
+            if (clickMe) clickMe.style.display = 'none';
+            
+            // Extra fireworks on click
+            if(envelope.classList.contains('open')) {
+                setInterval(() => {
+                    createFirework(Math.random() * canvas.width, Math.random() * canvas.height);
+                }, 1000);
+            }
+        });
+
+        // Start everything
+        window.onload = countdown;
+    </script>
+</body>
+</html>
+

@@ -125,44 +125,45 @@
             color: #333;
             border-radius: 5px;
             box-sizing: border-box;
-            overflow: hidden;
+            overflow-y: auto; /* Permitir scroll si el texto es muy largo */
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             text-align: center;
         }
 
         .envelope.open .card {
-            transform: translateY(-160px) scale(1.1);
-            height: auto;
-            min-height: 350px;
+            transform: translateY(-240px) scale(1.1); /* Subida ajustada para el texto largo */
+            height: 450px; /* Altura aumentada para que quepa el mensaje */
             z-index: 3;
-            width: 340px;
-            left: -20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            width: 360px;
+            left: -30px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
         }
 
         .card h2 {
             font-family: 'Dancing Script', cursive;
             color: #e63946;
-            font-size: 2rem;
+            font-size: 1.8rem;
             margin-bottom: 10px;
+            flex-shrink: 0;
         }
 
         .card p {
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin-bottom: 15px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            color: #444;
         }
 
         /* Pixel Daisy */
         .daisy-container {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             display: grid;
             grid-template-columns: repeat(8, 1fr);
-            margin: 10px auto;
+            margin-bottom: 10px;
+            flex-shrink: 0;
         }
 
         .pixel {
@@ -223,12 +224,17 @@
             <div class="click-me">CLICK HERE</div>
             <div class="card">
                 <div class="daisy-container" id="daisy">
-                    <!-- Pixel Daisy will be injected here -->
-                </div>
-                <h2>Happy Birthday Nehir!</h2>
-                <p>
-                    I know it's been a long time since we haven't spoken but I hope that today on your birthday you had a great time and you've been taking good care of yourself, remember to eat very well and save me some cake.
-                </p>
+                    </div>
+                <h2>Happy Birthday!</h2>
+                
+                <p>Hi! I hope you’re having an amazing day. I took the time to put this little space together to reach out because today is a special date.</p>
+                
+                <p>It’s been five years since we first met, and even though life has taken us in different directions and we both have our own lives now, there are people who will always hold a place of respect in my memory. I didn't want this day to pass by like any other; it's always a pleasure for me to know that you’re doing well and moving forward in everything you set your mind to.</p>
+                
+                <p>From the bottom of my heart, I wish for this new year of life to be filled with fulfillment, for you to reach every goal you have in mind, and for any challenges to only make you stronger. You deserve for nothing but good things to happen to you, today and always.</p>
+                
+                <p>Enjoy your celebration to the fullest, laugh a lot, and may this year undoubtedly be your best one yet. Sending you a big hug!</p>
+
                 <p class="font-bold text-pink-600">Happy Birthday 🎉🍰</p>
             </div>
         </div>
@@ -330,16 +336,14 @@
             const nums = ['3', '2', '1', '0'];
             for (let n of nums) {
                 const el = document.getElementById(`num-${n}`);
-                el.classList.add('active');
+                if(el) el.classList.add('active');
                 await new Promise(r => setTimeout(r, 1000));
-                el.classList.remove('active');
+                if(el) el.classList.remove('active');
             }
             
-            // Explosion
             document.getElementById('countdown-container').style.display = 'none';
             animate();
             
-            // Massive fireworks
             for(let i=0; i<15; i++) {
                 setTimeout(() => {
                     createFirework(
@@ -349,7 +353,6 @@
                 }, i * 200);
             }
 
-            // Show Envelope after fireworks start
             setTimeout(() => {
                 const wrapper = document.getElementById('envelope-wrapper');
                 wrapper.style.display = 'flex';
@@ -357,14 +360,12 @@
             }, 1500);
         };
 
-        // --- Interaction ---
         const envelope = document.getElementById('envelope');
         envelope.addEventListener('click', () => {
             envelope.classList.toggle('open');
             const clickMe = envelope.querySelector('.click-me');
             if (clickMe) clickMe.style.display = 'none';
             
-            // Extra fireworks on click
             if(envelope.classList.contains('open')) {
                 setInterval(() => {
                     createFirework(Math.random() * canvas.width, Math.random() * canvas.height);
@@ -372,9 +373,7 @@
             }
         });
 
-        // Start everything
         window.onload = countdown;
     </script>
 </body>
 </html>
-

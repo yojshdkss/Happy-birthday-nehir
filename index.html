@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Surprise</title>
+    <title>Happy Birthday Nehir</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap');
@@ -31,7 +31,7 @@
         }
 
         .number {
-            font-size: 15rem;
+            font-size: 10rem;
             font-weight: 800;
             color: #ffcc00;
             text-shadow: 0 0 30px rgba(255, 204, 0, 0.5);
@@ -80,10 +80,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .envelope:hover {
-            transform: translateY(-10px) rotateX(10px);
-        }
-
         .envelope::before {
             content: "";
             position: absolute;
@@ -120,46 +116,53 @@
             height: 180px;
             background: white;
             z-index: 1;
-            transition: transform 0.6s 0.5s;
-            padding: 20px;
+            transition: all 0.8s ease-in-out;
+            padding: 25px 20px;
             color: #333;
             border-radius: 5px;
             box-sizing: border-box;
-            overflow-y: auto; /* Permitir scroll si el texto es muy largo */
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
+            scrollbar-width: none; /* Firefox */
+        }
+
+        .card::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
         }
 
         .envelope.open .card {
-            transform: translateY(-240px) scale(1.1); /* Subida ajustada para el texto largo */
-            height: 450px; /* Altura aumentada para que quepa el mensaje */
-            z-index: 3;
-            width: 360px;
-            left: -30px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+            /* Corregido: Usamos transform proporcional para que no se salga de la pantalla */
+            transform: translateY(-65%) scale(1.1);
+            height: 420px;
+            max-height: 75vh;
+            z-index: 10;
+            width: 320px;
+            left: -10px;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.4);
         }
 
         .card h2 {
             font-family: 'Dancing Script', cursive;
             color: #e63946;
             font-size: 1.8rem;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             flex-shrink: 0;
         }
 
         .card p {
             font-size: 0.85rem;
             line-height: 1.6;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             color: #444;
         }
 
         /* Pixel Daisy */
         .daisy-container {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             display: grid;
             grid-template-columns: repeat(8, 1fr);
             margin-bottom: 10px;
@@ -202,9 +205,9 @@
             bottom: 20px;
             width: 100%;
             text-align: center;
-            color: rgba(255,255,255,0.2);
-            font-size: 0.8rem;
-            letter-spacing: 2px;
+            color: rgba(255,255,255,0.15);
+            font-size: 0.7rem;
+            letter-spacing: 3px;
         }
     </style>
 </head>
@@ -221,11 +224,10 @@
 
     <div id="envelope-wrapper">
         <div class="envelope" id="envelope">
-            <div class="click-me">CLICK HERE</div>
+            <div class="click-me">OPEN ME</div>
             <div class="card">
-                <div class="daisy-container" id="daisy">
-                    </div>
-                <h2>Happy Birthday!</h2>
+                <div class="daisy-container" id="daisy"></div>
+                <h2>Happy Birthday, Nehir!</h2>
                 
                 <p>Hi! I hope you’re having an amazing day. I took the time to put this little space together to reach out because today is a special date.</p>
                 
@@ -235,15 +237,15 @@
                 
                 <p>Enjoy your celebration to the fullest, laugh a lot, and may this year undoubtedly be your best one yet. Sending you a big hug!</p>
 
-                <p class="font-bold text-pink-600">Happy Birthday 🎉🍰</p>
+                <p class="font-bold text-pink-600 text-lg">Happy Birthday 🎉🍰</p>
             </div>
         </div>
     </div>
 
-    <div id="bg-text">CELEBRATING YOU</div>
+    <div id="bg-text">CELEBRATING FIVE YEARS OF KNOWING YOU</div>
 
     <script>
-        // --- Pixel Art Daisy Generation ---
+        // --- Pixel Daisy ---
         const daisyPattern = [
             'x','x','w','w','w','x','x','x',
             'x','w','w','y','w','w','x','x',
@@ -279,15 +281,11 @@
                 this.x = x;
                 this.y = y;
                 this.color = color;
-                this.velocity = {
-                    x: (Math.random() - 0.5) * 8,
-                    y: (Math.random() - 0.5) * 8
-                };
+                this.velocity = { x: (Math.random() - 0.5) * 8, y: (Math.random() - 0.5) * 8 };
                 this.alpha = 1;
                 this.friction = 0.95;
-                this.gravity = 0.2;
+                this.gravity = 0.15;
             }
-
             draw() {
                 ctx.save();
                 ctx.globalAlpha = this.alpha;
@@ -297,7 +295,6 @@
                 ctx.fill();
                 ctx.restore();
             }
-
             update() {
                 this.velocity.x *= this.friction;
                 this.velocity.y *= this.friction;
@@ -309,55 +306,40 @@
         }
 
         function createFirework(x, y) {
-            const colors = ['#ff0040', '#00ffcc', '#ffcc00', '#ff00ff', '#ffffff', '#00ff00'];
+            const colors = ['#ff0040', '#00ffcc', '#ffcc00', '#ff00ff', '#ffffff'];
             const color = colors[Math.floor(Math.random() * colors.length)];
-            for (let i = 0; i < 60; i++) {
-                particles.push(new Particle(x, y, color));
-            }
+            for (let i = 0; i < 50; i++) particles.push(new Particle(x, y, color));
         }
 
         function animate() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
             particles.forEach((p, i) => {
-                if (p.alpha > 0) {
-                    p.update();
-                    p.draw();
-                } else {
-                    particles.splice(i, 1);
-                }
+                if (p.alpha > 0) { p.update(); p.draw(); }
+                else { particles.splice(i, 1); }
             });
             requestAnimationFrame(animate);
         }
 
-        // --- Sequence Control ---
+        // --- Sequence ---
         const countdown = async () => {
             const nums = ['3', '2', '1', '0'];
             for (let n of nums) {
                 const el = document.getElementById(`num-${n}`);
-                if(el) el.classList.add('active');
+                el.classList.add('active');
                 await new Promise(r => setTimeout(r, 1000));
-                if(el) el.classList.remove('active');
+                el.classList.remove('active');
             }
-            
             document.getElementById('countdown-container').style.display = 'none';
             animate();
-            
-            for(let i=0; i<15; i++) {
-                setTimeout(() => {
-                    createFirework(
-                        Math.random() * canvas.width,
-                        Math.random() * (canvas.height * 0.6)
-                    );
-                }, i * 200);
+            for(let i=0; i<12; i++) {
+                setTimeout(() => createFirework(Math.random()*canvas.width, Math.random()*canvas.height*0.5), i*250);
             }
-
             setTimeout(() => {
                 const wrapper = document.getElementById('envelope-wrapper');
                 wrapper.style.display = 'flex';
                 setTimeout(() => wrapper.style.opacity = '1', 100);
-            }, 1500);
+            }, 1000);
         };
 
         const envelope = document.getElementById('envelope');
@@ -365,11 +347,8 @@
             envelope.classList.toggle('open');
             const clickMe = envelope.querySelector('.click-me');
             if (clickMe) clickMe.style.display = 'none';
-            
             if(envelope.classList.contains('open')) {
-                setInterval(() => {
-                    createFirework(Math.random() * canvas.width, Math.random() * canvas.height);
-                }, 1000);
+                setInterval(() => createFirework(Math.random()*canvas.width, Math.random()*canvas.height), 1500);
             }
         });
 
